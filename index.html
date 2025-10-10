@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colater - AI-Powered Brand Asset Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .form-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .results-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e1e5e9;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-content {
+            display: none;
+        }
+
+        .results-header {
+            border-bottom: 2px solid #e1e5e9;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .results-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #c33;
+        }
+
+        .success {
+            background: #efe;
+            color: #363;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #363;
+        }
+
+        .api-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .api-status.online {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .api-status.offline {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-section, .results-section {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Colater</h1>
+            <p>AI-Powered Brand Asset Generation - Create comprehensive brand strategies with multi-agent AI workflows</p>
+        </div>
+
+        <div class="api-status" id="apiStatus">
+            Checking API...
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 style="margin-bottom: 30px; color: #333;">Brand Details</h2>
+                
+                <form id="brandForm">
+                    <div class="form-group">
+                        <label for="brandName">Brand Name *</label>
+                        <input type="text" id="brandName" name="brandName" required placeholder="e.g., Tesla, Apple, Nike">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="industry">Industry</label>
+                        <select id="industry" name="industry">
+                            <option value="">Select an industry</option>
+                            <option value="technology">Technology</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="finance">Finance</option>
+                            <option value="education">Education</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="retail">Retail</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetAudience">Target Audience</label>
+                        <input type="text" id="targetAudience" name="targetAudience" placeholder="e.g., tech enthusiasts, young professionals">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brandValues">Brand Values</label>
+                        <textarea id="brandValues" name="brandValues" placeholder="e.g., innovation, sustainability, quality, accessibility"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usp">Unique Selling Proposition</label>
+                        <textarea id="usp" name="usp" placeholder="What makes your brand unique?"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Generate Brand Strategy</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-section">
+                <div id="loadingSection" class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating your brand strategy with AI agents...</p>
+                    <small>This may take 30-60 seconds</small>
+                </div>
+
+                <div id="resultsContent" class="results-content">
+                    <div class="results-header">
+                        <h2>Brand Strategy Results</h2>
+                        <p>Generated for: <strong id="resultBrandName"></strong></p>
+                    </div>
+
+                    <div class="results-tabs" id="resultsTabs">
+                        <!-- Tabs will be generated dynamically -->
+                    </div>
+
+                    <div id="resultsBody">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+
+                <div id="errorSection" style="display: none;">
+                    <div class="error">
+                        <h3>Error</h3>
+                        <p id="errorMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://api.colater.com';
+        let currentResults = null;
+
+        // Check API status on load
+        async function checkApiStatus() {
+            const statusEl = document.getElementById('apiStatus');
+            try {
+                const response = await fetch(`${API_BASE}/api/brand-research?name=test`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    statusEl.textContent = 'API Online';
+                    statusEl.className = 'api-status online';
+                } else {
+                    throw new Error('API returned error');
+                }
+            } catch (error) {
+                statusEl.textContent = 'API Offline';
+                statusEl.className = 'api-status offline';
+            }
+        }
+
+        // Form submission
+        document.getElementById('brandForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const brandData = {
+                name: formData.get('brandName'),
+                industry: formData.get('industry'),
+                targetAudience: formData.get('targetAudience'),
+                values: formData.get('brandValues'),
+                usp: formData.get('usp')
+            };
+
+            // Remove empty values
+            Object.keys(brandData).forEach(key => {
+                if (!brandData[key] || brandData[key].trim() === '') {
+                    delete brandData[key];
+                }
+            });
+
+            await generateBrandStrategy(brandData);
+        });
+
+        async function generateBrandStrategy(brandData) {
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsContent = document.getElementById('resultsContent');
+            const errorSection = document.getElementById('errorSection');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Show loading
+            loadingSection.style.display = 'block';
+            resultsContent.style.display = 'none';
+            errorSection.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+
+            try {
+                // Call the brand workflow endpoint
+                const response = await fetch(`${API_BASE}/api/brand-workflow`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        brandData: brandData,
+                        steps: ['research', 'visual', 'copy']
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const results = await response.json();
+                currentResults = results;
+                
+                displayResults(results, brandData.name);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message);
+            } finally {
+                loadingSection.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Brand Strategy';
+            }
+        }
+
+        function displayResults(results, brandName) {
+            const resultsContent = document.getElementById('resultsContent');
+            const resultBrandName = document.getElementById('resultBrandName');
+            const resultsTabs = document.getElementById('resultsTabs');
+            const resultsBody = document.getElementById('resultsBody');
+
+            resultBrandName.textContent = brandName;
+            
+            // Generate tabs
+            const tabs = [
+                { id: 'overview', label: 'Overview', content: generateOverview(results) },
+                { id: 'research', label: 'Research', content: generateResearchTab(results) },
+                { id: 'visual', label: 'Visual', content: generateVisualTab(results) },
+                { id: 'copy', label: 'Copy', content: generateCopyTab(results) }
+            ];
+
+            resultsTabs.innerHTML = tabs.map((tab, index) => 
+                `<button class="tab-btn ${index === 0 ? 'active' : ''}" onclick="showTab('${tab.id}')">${tab.label}</button>`
+            ).join('');
+
+            resultsBody.innerHTML = tabs.map((tab, index) => 
+                `<div class="tab-content ${index === 0 ? 'active' : ''}" id="tab-${tab.id}">${tab.content}</div>`
+            ).join('');
+
+            resultsContent.style.display = 'block';
+        }
+
+        function generateOverview(results) {
+            return `
+                <div class="result-item">
+                    <h4>Brand Strategy Summary</h4>
+                    <p>Comprehensive brand analysis completed for ${results.brandData.name || 'your brand'}.</p>
+                    <p><strong>Industry:</strong> ${results.brandData.industry || 'Not specified'}</p>
+                    <p><strong>Target Audience:</strong> ${results.brandData.targetAudience || 'Not specified'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Workflow Status</h4>
+                    <p>Completed ${results.metadata.completedSteps} of ${results.metadata.totalSteps} workflow steps</p>
+                    <p>Generated on: ${new Date(results.metadata.timestamp).toLocaleString()}</p>
+                </div>
+            `;
+        }
+
+        function generateResearchTab(results) {
+            if (!results.results.research) return '<p>Research data not available</p>';
+            
+            const research = results.results.research.data;
+            return `
+                <div class="result-item">
+                    <h4>Market Analysis</h4>
+                    <p>${research.marketAnalysis || 'Market analysis data will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Brand Positioning</h4>
+                    <p>${research.brandPositioning || 'Brand positioning recommendations will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Competitive Insights</h4>
+                    <p>${research.competitiveInsights || 'Competitive analysis will appear here'}</p>
+                </div>
+            `;
+        }
+
+        function generateVisualTab(results) {
+            if (!results.results.visual) return '<p>Visual concepts not available</p>';
+            
+            const visual = results.results.visual.data;
+            return `
+                <div class="result-item">
+                    <h4>Color Palette</h4>
+                    <p>${visual.colorPalette || 'Color recommendations will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Typography</h4>
+                    <p>${visual.typography || 'Typography recommendations will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Logo Concepts</h4>
+                    <p>${visual.logoConcepts || 'Logo concepts will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Style Guide</h4>
+                    <p>${visual.styleGuide || 'Style guide recommendations will appear here'}</p>
+                </div>
+            `;
+        }
+
+        function generateCopyTab(results) {
+            if (!results.results.copy) return '<p>Copy content not available</p>';
+            
+            const copy = results.results.copy.data;
+            return `
+                <div class="result-item">
+                    <h4>Taglines</h4>
+                    <p>${copy.taglines || 'Tagline suggestions will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Brand Voice</h4>
+                    <p>${copy.brandVoice || 'Brand voice guidelines will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Messaging</h4>
+                    <p>${copy.messaging || 'Core messaging will appear here'}</p>
+                </div>
+                <div class="result-item">
+                    <h4>Content Strategy</h4>
+                    <p>${copy.contentStrategy || 'Content strategy recommendations will appear here'}</p>
+                </div>
+            `;
+        }
+
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+        }
+
+        function showError(message) {
+            const errorSection = document.getElementById('errorSection');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            errorMessage.textContent = message;
+            errorSection.style.display = 'block';
+        }
+
+        function clearForm() {
+            document.getElementById('brandForm').reset();
+            document.getElementById('resultsContent').style.display = 'none';
+            document.getElementById('errorSection').style.display = 'none';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkApiStatus();
+        });
+    </script>
+</body>
+</html>
