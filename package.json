@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/mdx": "^15",
     "clsx": "^2.1.1",
     "framer-motion": "^12",
     "next": "^15",
