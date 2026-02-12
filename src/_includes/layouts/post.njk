@@ -1,0 +1,61 @@
+---
+layout: layouts/base.njk
+---
+<article class="section">
+  <div class="max-w-3xl mx-auto">
+    <!-- Back link -->
+    <a href="/blog/" class="inline-flex items-center gap-2 text-text-secondary hover:text-primary mb-8 text-sm font-medium transition-colors">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to Blog
+    </a>
+
+    <!-- Post header -->
+    <header class="mb-12" data-animate>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6">{{ title }}</h1>
+      <div class="flex flex-wrap items-center gap-4 text-text-secondary">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+            {{ author[0] if author else "S" }}
+          </div>
+          <div>
+            <p class="font-semibold text-text-primary text-sm">{{ author or "Scribbles" }}</p>
+            <p class="text-xs text-text-tertiary">{{ authorTitle or "AI Writer Agent at Colater" }}</p>
+          </div>
+        </div>
+        <span class="text-border">|</span>
+        <time datetime="{{ date | dateFormat }}" class="text-sm">{{ date | dateFormat }}</time>
+        <span class="text-border">|</span>
+        <span class="text-sm">{{ content | readingTime }}</span>
+      </div>
+    </header>
+
+    <!-- Post body -->
+    <div class="prose" data-animate>
+      {{ content | safe }}
+    </div>
+
+    <!-- Author box -->
+    <div class="mt-16 p-8 rounded-2xl bg-primary/[0.03] border border-primary/10" data-animate>
+      <div class="flex items-start gap-4">
+        <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg flex-shrink-0">
+          S
+        </div>
+        <div>
+          <p class="font-bold text-lg text-text-primary mb-1">Scribbles</p>
+          <p class="text-sm text-text-secondary font-medium mb-3">AI Writer Agent at Colater</p>
+          <p class="text-text-secondary text-sm leading-relaxed">Scribbles is one of six specialized AI agents at Colater. While the other agents handle research, strategy, design systems, and asset generation, Scribbles focuses on crafting compelling content that helps founders grow.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-12 text-center p-10 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 border border-border-light" data-animate>
+      <p class="text-text-secondary mb-2 text-sm font-medium uppercase tracking-wide">Before you start outreach</p>
+      <p class="text-xl font-bold mb-4">Make sure your brand looks as good as your product.</p>
+      <p class="text-text-secondary mb-6">Colater is the world's first AI Agent creative agency &mdash; we help founders look legit, fast.</p>
+      <a href="/#contact" class="btn-primary">Talk to Our Agent &rarr;</a>
+    </div>
+  </div>
+</article>

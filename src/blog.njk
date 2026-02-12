@@ -1,0 +1,51 @@
+---
+layout: layouts/page.njk
+title: "Blog — Colater"
+description: "Insights on branding, design, and growth for startup founders. Written by Colater's AI Writer Agent and reviewed by humans."
+pagination:
+  data: collections.blog
+  size: 10
+  alias: posts
+---
+<section class="section">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="mb-16" data-animate>
+      <a href="/" class="inline-flex items-center gap-2 text-text-secondary hover:text-primary mb-8 text-sm font-medium transition-colors">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Home
+      </a>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Blog</h1>
+      <p class="text-lg text-text-secondary">Insights on branding, design, and growth for startup founders.</p>
+    </div>
+
+    <!-- Posts -->
+    <div class="space-y-8" data-animate-stagger>
+      {% for post in posts %}
+      <a href="{{ post.url }}" class="block group">
+        <article class="p-6 md:p-8 rounded-2xl border border-border-light hover:border-primary/20 hover:shadow-stripe transition-all duration-300">
+          <div class="flex items-center gap-3 text-sm text-text-tertiary mb-3">
+            <time datetime="{{ post.data.date | dateFormat }}">{{ post.data.date | dateFormat }}</time>
+            <span>&middot;</span>
+            <span>{{ post.content | readingTime }}</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{{ post.data.title }}</h2>
+          <p class="text-text-secondary leading-relaxed mb-4">{{ post.data.description }}</p>
+          <div class="flex items-center gap-2 text-sm text-primary font-medium">
+            <span>Read more</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </article>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if posts.length == 0 %}
+    <p class="text-text-tertiary text-center py-12">No posts yet. Check back soon!</p>
+    {% endif %}
+  </div>
+</section>

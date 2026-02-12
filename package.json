@@ -1,27 +1,22 @@
 {
   "name": "colater-landing",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:eleventy": "eleventy --serve --port=8080",
+    "dev:tailwind": "tailwindcss -i src/css/styles.css -o _site/css/styles.css --watch",
+    "build": "npm-run-all build:tailwind build:eleventy",
+    "build:tailwind": "tailwindcss -i src/css/styles.css -o _site/css/styles.css --minify",
+    "build:eleventy": "eleventy"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12",
-    "next": "^15",
-    "react": "^19",
-    "react-dom": "^19",
-    "tailwind-merge": "^3"
+    "gsap": "^3.12.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@11ty/eleventy": "^3.0.0",
+    "@tailwindcss/cli": "^4.1.18",
+    "npm-run-all": "^4.1.5",
+    "tailwindcss": "^4.0.0"
   }
 }

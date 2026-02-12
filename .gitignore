@@ -1,36 +1,24 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Dependencies
+node_modules/
 
-# next.js
-/.next/
-/out/
+# 11ty output
+_site/
 
-# production
-/build
-
-# misc
+# OS files
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
 
-# env files
-.env*.local
-
-# vercel
+# Vercel
 .vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts

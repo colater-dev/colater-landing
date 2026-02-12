@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title or "Colater — AI-Powered Design Agency for Startups" }}</title>
+  <meta name="description" content="{{ description or 'One senior designer + six AI agents. Agency-level brand identity, product design, and web development at startup-friendly pricing.' }}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ title or 'Colater — AI-Powered Design Agency for Startups' }}">
+  <meta property="og:description" content="{{ description or 'One senior designer + six AI agents. Agency-level output at startup-friendly pricing.' }}">
+  <meta property="og:type" content="{{ 'article' if layout == 'layouts/post.njk' else 'website' }}">
+  <meta property="og:url" content="https://colater.com{{ page.url }}">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title or 'Colater — AI-Powered Design Agency for Startups' }}">
+  <meta name="twitter:description" content="{{ description or 'One senior designer + six AI agents. Agency-level output at startup-friendly pricing.' }}">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://colater.com{{ page.url }}">
+
+  <!-- Font preloads -->
+  <link rel="preload" href="/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/TASAExplorer-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  {% include "components/navbar.njk" %}
+
+  <main>
+    {{ content | safe }}
+  </main>
+
+  {% include "components/footer.njk" %}
+
+  <!-- GSAP from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="/js/main.js" defer></script>
+</body>
+</html>
