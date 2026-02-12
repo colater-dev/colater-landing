@@ -80,6 +80,21 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-primary);
 }
 
+/* ===== HERO GRADIENT TEXT ===== */
+.hero-gradient-text {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-primary-light) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 /* ===== GRADIENT MESH ===== */
 .gradient-mesh {
   background:
@@ -139,6 +154,38 @@ h1, h2, h3, h4, h5, h6 {
 [data-animate-stagger].is-visible > * {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ===== CHAT BUBBLES (Concierge) ===== */
+.chat-bubble {
+  display: inline-block;
+  max-width: 85%;
+  padding: 0.875rem 1.125rem;
+  background: var(--color-border-light);
+  border-radius: 1.125rem 1.125rem 1.125rem 0.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+/* ===== CONCIERGE MESSAGE ANIMATION ===== */
+/* Messages start hidden; GSAP timeline reveals them sequentially */
+.concierge-msg {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+/* Typing indicator starts hidden (GSAP shows it) */
+#concierge-typing {
+  opacity: 0;
+}
+
+/* Fallback for no-JS / Intersection Observer path */
+.concierge-msg.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ===== AGENT MESSAGE ANIMATION ===== */
@@ -351,7 +398,8 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
     transform: none;
   }
-  .agent-msg {
+  .agent-msg,
+  .concierge-msg {
     opacity: 1;
     transform: none;
   }

@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[data-animate], [data-animate-stagger]").forEach((el) => {
       el.classList.add("is-visible");
     });
-    document.querySelectorAll(".agent-msg").forEach((el) => {
+    document.querySelectorAll(".agent-msg, .concierge-msg").forEach((el) => {
       el.classList.add("is-visible");
     });
     return;
@@ -137,8 +137,84 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
 
+    // Animate concierge: header first, then sequential messages with typing indicator
+    const conciergeContainer = document.getElementById("concierge-messages");
+    const conciergeHeader = document.querySelector("[data-concierge-header]");
+    const conciergeBubbles = document.querySelectorAll(".concierge-bubble");
+    const conciergeTyping = document.getElementById("concierge-typing");
+    const conciergeRead = document.getElementById("concierge-read");
+
+    if (conciergeContainer && conciergeBubbles.length > 0) {
+      // Build a GSAP timeline triggered on scroll
+      const conciergeTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: conciergeContainer,
+          start: "top 80%",
+          once: true,
+        },
+      });
+
+      // 1. Show header (avatar + name)
+      if (conciergeHeader) {
+        conciergeTl.fromTo(conciergeHeader,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.4, ease: stripeEase }
+        );
+      }
+
+      // 2. Show typing indicator
+      if (conciergeTyping) {
+        conciergeTl.fromTo(conciergeTyping,
+          { opacity: 0, y: 8 },
+          { opacity: 1, y: 0, duration: 0.25, ease: stripeEase },
+          "+=0.3"
+        );
+      }
+
+      // 3. For each bubble: hide typing → show bubble → show typing again (except last)
+      conciergeBubbles.forEach((bubble, i) => {
+        const isLast = i === conciergeBubbles.length - 1;
+        const delay = i === 0 ? 0.6 : 0.8; // first message faster
+
+        // Hide typing
+        if (conciergeTyping) {
+          conciergeTl.to(conciergeTyping,
+            { opacity: 0, y: -4, duration: 0.15, ease: stripeEase },
+            `+=${delay}`
+          );
+        }
+
+        // Show message
+        conciergeTl.fromTo(bubble,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.4, ease: stripeEase },
+          "-=0.05"
+        );
+
+        // Show typing again (unless last message)
+        if (!isLast && conciergeTyping) {
+          conciergeTl.fromTo(conciergeTyping,
+            { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.25, ease: stripeEase },
+            "+=0.15"
+          );
+        }
+      });
+
+      // 4. After last message: hide typing for good, show read receipt
+      if (conciergeTyping) {
+        conciergeTl.set(conciergeTyping, { display: "none" });
+      }
+      if (conciergeRead) {
+        conciergeTl.to(conciergeRead,
+          { opacity: 1, duration: 0.3, ease: stripeEase },
+          "+=0.3"
+        );
+      }
+    }
+
     // Animate agent messages with stagger
-    const agentMessages = document.querySelectorAll(".agent-msg");
+    const agentMessages = document.querySelectorAll("#agent-messages .agent-msg");
     if (agentMessages.length > 0) {
       gsap.fromTo(
         agentMessages,
@@ -171,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { threshold: 0.1, rootMargin: "0px 0px -15% 0px" }
     );
 
-    document.querySelectorAll("[data-animate], [data-animate-stagger], .agent-msg").forEach((el) => {
+    document.querySelectorAll("[data-animate], [data-animate-stagger], .agent-msg, .concierge-msg").forEach((el) => {
       observer.observe(el);
     });
   }

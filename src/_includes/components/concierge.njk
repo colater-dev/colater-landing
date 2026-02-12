@@ -1,0 +1,72 @@
+<!-- Gyan — Human Concierge Chat -->
+<section class="section" id="concierge">
+  <div class="max-w-6xl mx-auto">
+    <div class="max-w-xl mx-auto">
+      <!-- Chat container -->
+      <div class="space-y-3" id="concierge-messages">
+        <!-- Avatar + name + online dot -->
+        <div class="flex items-center gap-3 mb-4 concierge-msg" data-concierge-header>
+          <div class="relative">
+            <img
+              src="/images/gyan.jpg"
+              alt="Gyan — Human Concierge at Colater"
+              class="w-12 h-12 rounded-full object-cover shadow-stripe-sm"
+              loading="lazy"
+            >
+            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-success rounded-full border-2 border-bg"></span>
+          </div>
+          <div>
+            <p class="text-lg font-semibold text-text-primary">Gyan</p>
+            <p class="text-sm text-text-tertiary">Human Concierge at Colater</p>
+          </div>
+        </div>
+
+        <!-- Message 1 -->
+        <div class="concierge-msg concierge-bubble" data-concierge-idx="0">
+          <div class="chat-bubble">
+            hi, I'm Gyan. I'm your human concierge at Colater.
+          </div>
+        </div>
+
+        <!-- Message 2 -->
+        <div class="concierge-msg concierge-bubble" data-concierge-idx="1">
+          <div class="chat-bubble">
+            I used to run a design agency myself, but now I work at a new type of agency for startups.
+          </div>
+        </div>
+
+        <!-- Message 3 -->
+        <div class="concierge-msg concierge-bubble" data-concierge-idx="2">
+          <div class="chat-bubble">
+            Most of the employees here are AI Agents. They have personality, remember chats you had with them, and are good at different things.
+          </div>
+        </div>
+
+        <!-- Message 4 -->
+        <div class="concierge-msg concierge-bubble" data-concierge-idx="3">
+          <div class="chat-bubble">
+            We can create logos, landing pages, pitch decks and more - to help you tell your story better to your first customers and investors.
+          </div>
+        </div>
+
+        <!-- Typing indicator (visible while messages are loading, hides after last message) -->
+        <div class="flex items-center gap-2 pl-1 pt-1" id="concierge-typing">
+          <div class="chat-bubble !py-3 !px-4 inline-flex items-center gap-1.5">
+            <span class="typing-dot w-2 h-2 rounded-full bg-text-tertiary/50"></span>
+            <span class="typing-dot w-2 h-2 rounded-full bg-text-tertiary/50"></span>
+            <span class="typing-dot w-2 h-2 rounded-full bg-text-tertiary/50"></span>
+          </div>
+        </div>
+
+        <!-- Read receipt (hidden until all messages shown) -->
+        <div class="flex items-center gap-1.5 pl-1 pt-1 opacity-0 transition-opacity duration-300" id="concierge-read">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6L5 10L11 2" stroke="#8B7FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 6L9 10L15 2" stroke="#8B7FFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="text-xs text-text-tertiary">Read</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
